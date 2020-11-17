@@ -1,0 +1,19 @@
+{
+  "name": "trabalho-01",
+  "version": "1.0.0",
+  "description": "Elaboração de um jogo da velha pela internet",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RogerEC/DEC7551-Trabalhos.git"
+  },
+  "author": "Roger Eliodoro Condras",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/RogerEC/DEC7551-Trabalhos/issues"
+  },
+  "homepage": "https://github.com/RogerEC/DEC7551-Trabalhos#readme"
+}
