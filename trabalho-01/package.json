@@ -15,5 +15,11 @@
   "bugs": {
     "url": "https://github.com/RogerEC/DEC7551-Trabalhos/issues"
   },
-  "homepage": "https://github.com/RogerEC/DEC7551-Trabalhos#readme"
+  "homepage": "https://github.com/RogerEC/DEC7551-Trabalhos#readme",
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "mongodb": "^3.6.3",
+    "socket.io": "^3.0.1"
+  }
 }

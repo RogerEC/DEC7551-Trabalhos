@@ -1,0 +1,92 @@
+.quadrado {
+    display: block;
+    cursor: pointer;
+    width: 12rem;
+    height: 12rem;
+    font-size: 10rem;
+    padding-bottom: 1.25rem;
+    font-weight: 900;
+    line-height: 1;
+    text-align: center;
+    color: #495057;
+    background-color: #fff;
+    border: none;
+}
+
+.ocultar {
+    display: none !important;
+}
+
+.backgound-color {
+    background-color: #00095c;
+    color: #869db4;
+}
+
+.livre:hover {
+    background-color: rgb(185, 185, 185);
+}
+
+input:disabled {
+    background-color: #ffffff !important;
+    cursor: default;
+}
+
+.quadrado:focus {
+    outline: 0;
+}
+
+.tabuleiro {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+}
+
+.linha {
+    width: 36rem;
+    display: flex;
+    flex-direction: row;
+}
+
+.border-left {
+    border-left: 0.75rem solid #1f1f1f !important;
+}
+
+.border-right {
+    border-right: 0.75rem solid #1f1f1f !important;
+}
+
+.border-top {
+    border-top: 0.75rem solid #1f1f1f !important;
+}
+
+.border-bottom {
+    border-bottom: 0.75rem solid #1f1f1f !important;
+}
+
+.footer {
+    background-color: black;
+    color: white;
+    width: 100%;
+    text-align: center;
+    z-index:1000;
+}
+
+html{
+    height: 100%;
+    width: 100%;
+}
+
+body{
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+main{
+    width: 100%;
+    flex: 1;
+    padding-top: 60px;
+}
