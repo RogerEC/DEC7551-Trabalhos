@@ -3,35 +3,21 @@ const app = express();
 const server = require('http').createServer(app);
 const io = require('socket.io')(server);
 const path = require('path');
-const mongoClient = require('mongodb').MongoClient;
-const assert = require('assert')
 require('dotenv/config');
-
-const dbName = 'jogo-da-velha';
-const client = new mongoClient(process.env.URL_MONGODB, {useNewUrlParser: true, useUnifiedTopology: true});
-
-client.connect(function(error) {
-    if(error){
-        console.log(error);
-        process.exit(1);
-    }
-    
-    console.log("Connected successfully to server");
-
-    const db = client.db(dbName);
-
-    client.close();
-    
-});
 
 server.listen(3000, () => {
     console.log("servidor na porta 3000!");
 });
 
+const Jogador = require("./Jogador");
+var jogador = [];
+const Partida = require("./Partida");
+var partida= [];
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 io.on('connection', socket => {
-    console.log(socket.id);
+    console.log("conectou" + socket.id);
     socket.on('sendMessage', data => {
         console.log(data);
     });
@@ -39,9 +25,31 @@ io.on('connection', socket => {
         console.log(jogada);
     });
     socket.on("novoJogador", nomeJogador => {
-        console.log(nomeJogador);
+        jogador.push(new Jogador(socket.id, nomeJogador));
+        socket.emit("cadastroOK", jogador[jogador.length - 1]);
+        socket.emit("listaJogadores", jogador);
     });
-    socket.on("desconectarJogador", nomeJogador => {
-        console.log(nomeJogador);
+    socket.on("desconectarJogador", dadosJogador => {
+        removerJogador(dadosJogador.id);
     });
+    socket.on('disconect', data => {
+        console.log("DESCONECTOU");
+        console.log(data);
+    })
 });
+
+io.on('disconection', socket => {
+    console.log("desconectou " + socket.id);
+});
+
+function removerJogador(id){
+    var indice = -1;
+    jogador.forEach(function(elemento, index){
+        if(elemento.getId() === id){
+            indice = index;
+        }
+    });
+    console.log(jogador);
+    jogador.splice(indice, 1);
+    console.log(jogador);
+}

@@ -3,13 +3,21 @@ $(document).ready(function(){
     const socket = io('http://localhost:3000');
 
     var marcador = "";
-    var nomeJogador = "";
+    var jogador;
     var idPartida = "";
     var jogada = new Object();
     jogada.marcador;
     jogada.casaMarcada;
     jogada.nomeJogador;
     jogada.idPartida;
+
+    socket.on("cadastroOK", function(dadosJogador){
+        jogador = dadosJogador;
+    });
+
+    socket.on("listaJogadores", function(listaJogadores){
+        console.log("listaJogadores");
+    });
 
     $("#BotaoInicio").click();
 
@@ -27,7 +35,7 @@ $(document).ready(function(){
 
     $(window).on("unload", function(event){
         event.preventDefault();
-        socket.emit("desconectarJogador", nomeJogador);
+        socket.emit("desconectarJogador", jogador);
     });
 
     $(".quadrado").on("click", function(){
@@ -63,4 +71,15 @@ $(document).ready(function(){
             $(this).removeAttr("disabled");
         });
     }
+
+    $('input').keypress(function (e) {
+        var code = null;
+        code = (e.keyCode ? e.keyCode : e.which);
+        if(code == 13 && $("#nomeJogador").is(":focus")){
+            $("#EnviarNome").click();
+            return false;
+        }else{
+            return true;
+        }                
+   });
 });
