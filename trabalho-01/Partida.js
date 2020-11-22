@@ -7,7 +7,7 @@ module.exports = class Partida {
         this.jogador2 = jogador2;
         this.status = "em andamento";
         this.ganhador = '';
-        this.casas = [];
+        this.casa = [];
         this.casa.push(["casa00", "casa01", "casa02"]);
         this.casa.push(["casa10", "casa11", "casa12"]);
         this.casa.push(["casa20", "casa21", "casa22"]);
@@ -75,9 +75,9 @@ module.exports = class Partida {
 
     verificaTabuleiro(){
 
-        for(var i = 0; i < this.casas.length; i++){
+        for(var i = 0; i < this.casa.length; i++){
             
-            this.verificaCasas(this.casas[i]);
+            this.verificaCasas(this.casa[i]);
             
             if(this.status != "em andamento"){
                 

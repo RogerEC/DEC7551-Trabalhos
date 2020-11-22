@@ -15,31 +15,25 @@ const jogo = new Jogo();
 app.use(express.static(path.join(__dirname, 'public')));
 
 io.on('connection', socket => {
-    console.log("conectou" + socket.id);
-    socket.on('sendMessage', data => {
-        console.log(data);
-    });
+    console.log("conectou " + socket.id);
+    
     socket.on("novaJogada", jogada => {
         console.log(jogada);
     });
     socket.on("novoJogador", nomeJogador => {
-        jogador.push(new Jogador(socket.id, nomeJogador));
-        socket.emit("cadastroOK", jogador[jogador.length - 1]);
-        socket.emit("listaJogadores", jogador);
+        console.log("Adicionado Jogador "+nomeJogador);
+        jogo.adicionarJogador(socket.id, nomeJogador)
+        socket.emit("cadastroOK", jogo.jogador[jogo.jogador.length - 1]);
     });
     socket.on("desconectarJogador", dadosJogador => {
-        removerJogador(dadosJogador.id);
+        jogo.removerJogador(dadosJogador.id);
     });
-    socket.on('disconect', data => {
-        console.log("DESCONECTOU");
-        console.log(data);
-    })
+    socket.on('solicitarListaJogadores', () => {
+        console.log("Enviada lista Jogadores");
+        socket.emit("atualizarListaJogadores", jogo.jogador);
+    });
 });
 
 io.on('disconection', socket => {
     console.log("desconectou " + socket.id);
 });
-
-jogo.adicionarJogador("001", "Roger");
-jogo.adicionarJogador("002", "Tobias");
-jogo.novaPartida("001", "002");

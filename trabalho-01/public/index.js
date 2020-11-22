@@ -1,10 +1,14 @@
 $(document).ready(function(){
 
+    $("#TABULEIRO").hide();
+    $("#LISTA-JOGADORES").hide();
+    $("#LISTA-JOGADORES").removeClass("ocultar");
+    $("#TABULEIRO").removeClass("ocultar");
+    $("#BotaoInicio").click();
+
     const socket = io('http://localhost:3000');
 
-    var marcador = "";
     var jogador;
-    var idPartida = "";
     var jogada = new Object();
     jogada.marcador;
     jogada.casaMarcada;
@@ -13,29 +17,75 @@ $(document).ready(function(){
 
     socket.on("cadastroOK", function(dadosJogador){
         jogador = dadosJogador;
+        console.log("SOLICITAR DADOS");
+        socket.emit("solicitarListaJogadores");
+        $("#LISTA-JOGADORES").show();
     });
 
-    socket.on("listaJogadores", function(listaJogadores){
-        console.log("listaJogadores");
-    });
+    function limparListaJogadores(){
+        $(".LINHA-LISTA-JOGADORES").remove();
+    }
 
-    $("#BotaoInicio").click();
+    socket.on("atualizarListaJogadores", function(listaJogadores){
+        console.log("ATUALIZAR LISTA")
+        limparListaJogadores();
+        listaJogadores.forEach((elemento, index) => {
+            if(elemento.id === jogador.id){
+                elemento.nome = elemento.nome + " (você)"
+                estado = "Livre"
+                corEstado = "btn-success";
+                desabilitar = 'hidden';
+            }else if(elemento.status == true){
+                estado = "Livre"
+                corEstado = "btn-success";
+                desabilitar = '';
+            }else{
+                estado = "Em partida"
+                corEstado = "btn-warning";
+                desabilitar = 'disabled';
+            }
+            $("#INICIO-LISTA-JOGADORES").append('<div class="form-row LINHA-LISTA-JOGADORES"><div class="form-group col-6"><input type="text" class="form-control" value="'+elemento.nome+'" readonly></div><div class="form-group col-3"><input type="text" class="btn '+corEstado+' w-100" value="'+estado+'" readonly></div><div class="form-group col-3"><button class="btn btn-primary botao-convidar w-100" id="botaoConvidar_'+index+'" '+desabilitar+'>CONVIDAR</button></div></div>');
+        });
+    });
+    
+    var jaValidouNome = false;
+
+    $("#BotaoInicio").on("click", function(){
+        jaValidouNome = false;
+    })
 
     $("#EnviarNome").on("click", function(event){
         event.preventDefault();
         nomeJogador = $("#nomeJogador").val();
-        //console.log(nomeJogador);
         if(nomeJogador != ""){
             socket.emit("novoJogador", nomeJogador);
         }else{
-            $("#BotaoInicio").click();
+            jaValidouNome = true;
+            $("#ERRO-NOME").show();
+            $("#nomeJogador").addClass("is-invalid");
+            return false;
         }
         
     });
 
+    $("#nomeJogador").keyup(function(){
+        console.log("VALIDAÇÃO")
+        if(jaValidouNome){
+            if($("#nomeJogador").val() != ''){
+                $("#ERRO-NOME").hide();
+                $("#nomeJogador").removeClass("is-invalid");
+                $("#nomeJogador").addClass("is-valid");
+            }else{
+                $("#ERRO-NOME").show();
+                $("#nomeJogador").removeClass("is-valid");
+                $("#nomeJogador").addClass("is-invalid");
+            }
+        }
+    })
+
     $(window).on("unload", function(event){
         event.preventDefault();
-        socket.emit("desconectarJogador", jogador);
+        //socket.emit("desconectarJogador", jogador);
     });
 
     $(".quadrado").on("click", function(){

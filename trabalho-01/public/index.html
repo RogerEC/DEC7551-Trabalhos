@@ -10,13 +10,25 @@
 
         </header>
 
-        <main class="container w-100" style="text-align: center;">
+        <main class="container w-100">
 
-            <div id="LISTA-JOGADORES">
-
+            <div id="LISTA-JOGADORES" class="w-100 ocultar">
+                <div class=" w-100 mt-3 mb-4">
+                    <h3 class="text-center">LISTA DE JOGADORES ON-LINE</h3>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-6 mb-0">
+                        <label><b>NOME JOGADOR</b></label>
+                    </div>
+                    <div class="form-group col-3 mb-0 text-center">
+                        <label><b>STATUS</b></label>
+                    </div>
+                </div>
+                <div id="INICIO-LISTA-JOGADORES">
+                </div>
             </div>
 
-            <div id="TABULEIRO" class="tabuleiro ocultar">
+            <div id="TABULEIRO" class="#tabuleiro ocultar">
                 <div class="linha">
                     <input id="casa00" name="casa00" type="text" class="quadrado livre border-right border-bottom" readonly>
                     <input id="casa01" name="casa01" type="text" class="quadrado livre border-right border-bottom border-left" readonly>
@@ -33,7 +45,7 @@
                     <input id="casa22" name="casa22" type="text" class="quadrado livre border-top border-left" readonly>
                 </div>
             </div>
-
+            
             <button type="button" class="btn btn-primary" data-toggle="modal" data-backdrop="static" data-target="#InicioJogo" id="BotaoInicio" hidden></button>
             <div class="modal fade" id="InicioJogo" tabindex="-1" role="dialog" aria-labelledby="TituloInicioJogo" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered" role="document">
@@ -46,7 +58,8 @@
                                 <form action="">
                                     <div class="form-row form-group">
                                         <label for="nomeJogador">Digite seu nome:</label>
-                                        <input id="nomeJogador" name="nomeJogador" type="text" class="form-control">
+                                        <input id="nomeJogador" name="nomeJogador" type="text" class="form-control" required>
+                                        <div id="ERRO-NOME" class="invalid-feedback"><b>É obrigatório digitar o nome!</b></div>
                                     </div>
                                 </form>
                             </div>
@@ -56,8 +69,8 @@
                         </div>
                     </div>
                 </div>
-            </div><!--/Modal Mensagem Erro Preenchimento -->
-
+            </div> <!--/Modal Mensagem Erro Preenchimento -->
+        
         </main>
 
         <footer class="footer">

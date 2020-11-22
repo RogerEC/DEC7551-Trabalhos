@@ -22,14 +22,14 @@ module.exports = class Jogo {
             if(this.partida[i].getId() === idPartida){
                 return i;
             }
-        })
+        }
         return -1;
     }
 
     procurarPartidaPeloIDJogador(idJogador){
         for(var i = 0; i < this.partida.length; i++){
-            if(this.partida[i].jogador1.getId() === idJogador
-            || this.partida[i].jogador2.getId() === idJogador){
+            if(this.partida[i].jogador1.id === idJogador
+            || this.partida[i].jogador2.id === idJogador){
                 return i;
             }
         }
@@ -68,9 +68,8 @@ module.exports = class Jogo {
 
     removerJogador(idJogador){
 
-        var indiceJogador = this.procurarIndexJogador(idJogador);
-        
-        var retorno = 0;
+        var indiceJogador = this.procurarJogadorPeloID(idJogador);
+        var retorno = true;
 
         if(indiceJogador != -1){
             
@@ -78,12 +77,18 @@ module.exports = class Jogo {
            
             if(indicePartida != -1){
 
-                retorno = (this.partida[indicePartida].jogador1.getId === idJogador)?
-                this.partida[indicePartida].jogador1 : this.partida[indicePartida].jogador2;
-                this.removerPartida(indicePartida);
+                this.partida[indicePartida].setStatusInterrompido();
+                
+                if(this.partida[indicePartida].jogador1.getId() === idJogador){
+                    this.partida[indicePartida].jogador1 = false;
+                    retorno = false;
+                }else{
+                    this.partida[indicePartida].jogador2 = false;
+                    retorno = false;
+                }
             }
 
-            this.jogador.splice(indice, 1);
+            this.jogador.splice(indiceJogador, 1);
         }
 
         return retorno;

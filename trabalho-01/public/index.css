@@ -1,5 +1,5 @@
 .quadrado {
-    display: block;
+    /*display: block;*/
     cursor: pointer;
     width: 12rem;
     height: 12rem;
@@ -14,7 +14,11 @@
 }
 
 .ocultar {
-    display: none !important;
+    display: none;
+}
+
+.exibir {
+    display: block;
 }
 
 .backgound-color {
@@ -27,7 +31,7 @@
 }
 
 input:disabled {
-    background-color: #ffffff !important;
+    background-color: #ffffff;
     cursor: default;
 }
 
