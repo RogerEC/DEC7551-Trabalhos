@@ -5,6 +5,17 @@ module.exports = class Partida {
         this.id = jogador1.id + jogador2.id;
         this.jogador1 = jogador1;
         this.jogador2 = jogador2;
+        this.status = "em andamento";
+        this.ganhador = '';
+        this.casas = [];
+        this.casa.push(["casa00", "casa01", "casa02"]);
+        this.casa.push(["casa10", "casa11", "casa12"]);
+        this.casa.push(["casa20", "casa21", "casa22"]);
+        this.casa.push(["casa00", "casa10", "casa20"]);
+        this.casa.push(["casa01", "casa11", "casa12"]);
+        this.casa.push(["casa02", "casa12", "casa22"]);
+        this.casa.push(["casa00", "casa11", "casa22"]);
+        this.casa.push(["casa20", "casa11", "casa02"]);
         
         this.jogador1.setStatusOcupado();
         this.jogador2.setStatusOcupado();
@@ -30,6 +41,14 @@ module.exports = class Partida {
         this.tabuleiro.casa22 = '';
     }
 
+    getId(){
+        return this.id;
+    }
+
+    getTabuleiro(){
+        return this.tabuleiro;
+    }
+
     setCasa(casa, marcador){
         
         this.tabuleiro[casa] = marcador;
@@ -41,38 +60,28 @@ module.exports = class Partida {
             
             if(this.tabuleiro[casa[0]] === this.jogador1.marcador){
                 
-                return [this.jogador1, casa];
+                this.status = "encerrado";
+                this.ganhador = this.jogador1;
+                this.casas = casa;
             
             }else if(this.tabuleiro[casa[0]] === this.jogador2.marcador){
                 
-                return [this.jogador2, casa];
-            
+                this.status = "encerrado";
+                this.ganhador = this.jogador2;
+                this.casas = casa;
             }
         }
-        
-        return [false, false];
     }
 
     verificaTabuleiro(){
 
-        var casa = [];
-
-        casa.push(["casa00", "casa01", "casa02"]);
-        casa.push(["casa10", "casa11", "casa12"]);
-        casa.push(["casa20", "casa21", "casa22"]);
-        casa.push(["casa00", "casa10", "casa20"]);
-        casa.push(["casa01", "casa11", "casa12"]);
-        casa.push(["casa02", "casa12", "casa22"]);
-        casa.push(["casa00", "casa11", "casa22"]);
-        casa.push(["casa20", "casa11", "casa02"]);
-
-        for(var i = 0; i < casa.length; i = i + 1){
+        for(var i = 0; i < this.casas.length; i++){
             
-            var retorno = this.verificaCasas(casa[i]);
+            this.verificaCasas(this.casas[i]);
             
-            if(retorno[0] != false){
+            if(this.status != "em andamento"){
                 
-                return retorno;
+                return;
             }
         }
 
@@ -80,10 +89,32 @@ module.exports = class Partida {
         this.tabuleiro.casa10 != '' && this.tabuleiro.casa11 != '' && this.tabuleiro.casa12 != '' &&
         this.tabuleiro.casa20 != '' && this.tabuleiro.casa21 != '' && this.tabuleiro.casa22 != '') {
             
-            return ["empate", "empate"];
+            return this.status = "empate";
         }
+    }
 
-        return [false, false];
+    setStatusInterrompido(){
+        this.status = "interrompido";
+    }
+
+    getStatus(){
+        return this.status;
+    }
+
+    getCasas(){
+        return this.casas;
+    }
+
+    getGanhador(){
+        return this.ganhador;
     }
     
+    getOutroJogador(idJogador){
+        if(this.jogador1 != '' && this.jogador1.getID() === idJogador){
+            return this.jogador1;
+        }else if(this.jogador2 != '' && this.jogador2.getId() === idJogador){
+            return this.jogador2;
+        }
+        return '';
+    }
 }

@@ -25,6 +25,7 @@ module.exports = class Jogador {
 
     setStatusLivre(){
         this.status = true;
+        this.marcador = '';
     }
 
     setMarcadorX(){
