@@ -54,7 +54,7 @@ $(document).ready(function(){
         jaValidouNome = false;
     })
 
-    $("#EnviarNome").on("click", function(event){
+    $("#BotaoModal").on("click", function(event){
         event.preventDefault();
         nomeJogador = $("#nomeJogador").val();
         if(nomeJogador != ""){
@@ -85,7 +85,7 @@ $(document).ready(function(){
 
     $(window).on("unload", function(event){
         event.preventDefault();
-        //socket.emit("desconectarJogador", jogador);
+        socket.emit("desconectarJogador", jogador);
     });
 
     $(".quadrado").on("click", function(){
@@ -126,7 +126,7 @@ $(document).ready(function(){
         var code = null;
         code = (e.keyCode ? e.keyCode : e.which);
         if(code == 13 && $("#nomeJogador").is(":focus")){
-            $("#EnviarNome").click();
+            $("#BotaoModal").click();
             return false;
         }else{
             return true;

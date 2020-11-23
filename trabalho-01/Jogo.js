@@ -10,7 +10,7 @@ module.exports = class Jogo {
 
     procurarJogadorPeloID(idJogador){
         for(var i = 0; i < this.jogador.length; i++){
-            if(this.jogador[i].getId() === idJogador){
+            if(this.jogador[i].id === idJogador){
                 return i;
             }
         }
@@ -19,7 +19,7 @@ module.exports = class Jogo {
 
     procurarPartidaPeloID(idPartida){
         for(var i = 0; i < this.partida.length; i++){
-            if(this.partida[i].getId() === idPartida){
+            if(this.partida[i].id === idPartida){
                 return i;
             }
         }
@@ -69,28 +69,25 @@ module.exports = class Jogo {
     removerJogador(idJogador){
 
         var indiceJogador = this.procurarJogadorPeloID(idJogador);
-        var retorno = true;
+        var indicePartida = -1;
 
         if(indiceJogador != -1){
             
-            var indicePartida = this.procurarPartidaPeloIDJogador(idJogador);
+            indicePartida = this.procurarPartidaPeloIDJogador(idJogador);
            
             if(indicePartida != -1){
 
                 this.partida[indicePartida].setStatusInterrompido();
                 
-                if(this.partida[indicePartida].jogador1.getId() === idJogador){
+                if(this.partida[indicePartida].jogador1.id === idJogador){
                     this.partida[indicePartida].jogador1 = false;
-                    retorno = false;
                 }else{
                     this.partida[indicePartida].jogador2 = false;
-                    retorno = false;
                 }
             }
-
             this.jogador.splice(indiceJogador, 1);
         }
 
-        return retorno;
+        return indicePartida;
     }
 }

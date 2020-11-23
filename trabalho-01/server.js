@@ -24,9 +24,15 @@ io.on('connection', socket => {
         console.log("Adicionado Jogador "+nomeJogador);
         jogo.adicionarJogador(socket.id, nomeJogador)
         socket.emit("cadastroOK", jogo.jogador[jogo.jogador.length - 1]);
+        socket.broadcast.emit("atualizarListaJogadores", jogo.jogador);
     });
     socket.on("desconectarJogador", dadosJogador => {
-        jogo.removerJogador(dadosJogador.id);
+        console.log(dadosJogador.id +' '+dadosJogador.nome);
+        var indicePartida = jogo.removerJogador(dadosJogador.id);
+        if(indicePartida != -1){
+            console.log("encerra partida");
+        }
+        socket.broadcast.emit("atualizarListaJogadores", jogo.jogador);
     });
     socket.on('solicitarListaJogadores', () => {
         console.log("Enviada lista Jogadores");
