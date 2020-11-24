@@ -51,13 +51,15 @@ $(document).ready(function(){
 
     function ocultarCamposModal(){
         $("#BotaoModalCancelar").hide();
+        $("#BotaoModalConfirmar").show();
         $("#MODAL-CONVITE-RECEBIDO").hide();
+        $("#MODAL-AVISOS-E-ERROS").hide();
         $("#MODAL-ENVIAR-NOME").hide();
-        $("#MODAL-ERRO-INICIO-PARTIDA").hide();
     }
 
     socket.on("partidaIniciada", id_partida => {
         idPart = id_partida;
+        $("#BotaoModal2Cancelar").click();
         resetTabuleiro();
         desabilitaTabuleiro();
         $("#LISTA-JOGADORES").hide();
@@ -65,10 +67,13 @@ $(document).ready(function(){
     })
 
     socket.on("erroInicioPartida", () => {
+        $("#BotaoModal2Cancelar").click();
+        $("#MODAL-AVISOS-E-ERROS p").remove();
+        $("#MODAL-AVISOS-E-ERROS").append('<p>Houve um erro ao tentar iniciar a partida. Tente novamente!</p>');
         ocultarCamposModal();
         $("#BotaoModalConfirmar").text("OK");
         $("#TITULO-MODAL").text("ERRO!");
-        $("#MODAL-ERRO-INICIO-PARTIDA").show();
+        $("#MODAL-AVISOS-E-ERROS").show();
         $("#BotaoAbrirModal").click();
         socket.emit("solicitarListaJogadores");
         $("#LISTA-JOGADORES").show();
@@ -86,6 +91,17 @@ $(document).ready(function(){
         $("#BotaoModalCancelar").show();
         $("#BotaoAbrirModal").click();
     });
+
+    socket.on("conviteRecusado", convidado => {
+        $("#BotaoModal2Cancelar").click();
+        $("#MODAL-AVISOS-E-ERROS p").remove();
+        $("#MODAL-AVISOS-E-ERROS").append('<p>'+convidado.nome+' recusou o seu convite para uma partida!</p>');
+        ocultarCamposModal();
+        $("#BotaoModalConfirmar").text("OK");
+        $("#TITULO-MODAL").text("Seu convite foi recusado!");
+        $("#MODAL-AVISOS-E-ERROS").show();
+        $("#BotaoAbrirModal").click();
+    })
 
     $("#BotaoModalCancelar").on("click", function(event){
         event.preventDefault();
@@ -117,6 +133,7 @@ $(document).ready(function(){
     $("#INICIO-LISTA-JOGADORES").on("click", ".botao-convidar", function(event){
         event.preventDefault();
         socket.emit("enviarConvite", jogador, $(this).val());
+        $("#BotaoAbrirModal2").click();
     })
     
     var jaValidouNome = false;

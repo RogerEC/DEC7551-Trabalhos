@@ -62,14 +62,33 @@
                                 </div>
                                 <div id="MODAL-CONVITE-RECEBIDO" class="mt-3">
                                 </div>
-                                <div id="MODAL-ERRO-INICIO-PARTIDA" class="mt-3">
-                                    <p>Houve um erro ao tentar iniciar a partida. Tente novamente!</p>
+                                <div id="MODAL-AVISOS-E-ERROS" class="mt-3">
                                 </div>
                             </div>
                         </div>
                         <div class="modal-footer backgound-color">
                             <button id="BotaoModalCancelar" type="button" class="btn btn-danger" data-dismiss="modal">Recusar</button>
                             <button id="BotaoModalConfirmar" type="button" class="btn btn-primary" data-dismiss="modal">Enviar</button>
+                        </div>
+                    </div>
+                </div>
+            </div> <!--/Modal Mensagem Erro Preenchimento -->
+
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-backdrop="static" data-target="#MODAL2" id="BotaoAbrirModal2" hidden></button>
+            <div class="modal fade" id="MODAL2" tabindex="-1" role="dialog" aria-labelledby="TITULO-MODAL2" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header backgound-color">
+                            <h5 class="modal-title text-center w-100" id="TITULO-MODAL2">Convite enviado</h5>
+                        </div>
+                        <div class="modal-body">
+                            <div class="container-fluid">
+                                <p class="mt-3">Seu convite foi enviado, por favor aguarde!</p>
+                            </div>
+                        </div>
+                        <div class="modal-footer backgound-color">
+                            <button id="BotaoModal2Cancelar" type="button" class="btn btn-danger" data-dismiss="modal" hidden>Fechar</button>
+                            <button id="BotaoModal2Confirmar" type="button" class="btn btn-primary" data-dismiss="modal" disabled>OK</button>
                         </div>
                     </div>
                 </div>

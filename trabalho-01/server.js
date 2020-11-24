@@ -52,14 +52,14 @@ io.on('connection', socket => {
         if(idPartida != false){
             io.to(convidado).to(convidante).emit("partidaIniciada", idPartida);
         }else{
-            io.to(convidato).to(convidante).emit("erroInicioPartida");
+            io.to(convidado).to(convidante).emit("erroInicioPartida");
         }
     });
     socket.on("recusarConvite", (convidado, convidante) => {
         jogo.setStatusJogadorLivre(convidante);
-        jogo.setStatusJogadorLivre(convidado);
-        io.to(convidante).emit("conviteRecusado", convidado);
+        jogo.setStatusJogadorLivre(convidado.id);
         io.emit("atualizarListaJogadores", jogo.jogador);
+        io.to(convidante).emit("conviteRecusado", convidado);
     });
 });
 
