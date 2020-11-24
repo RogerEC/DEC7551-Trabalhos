@@ -8,6 +8,20 @@ module.exports = class Jogo {
         this.partida = [];
     }
 
+    setStatusJogadorLivre(idJogador){
+        var indiceJogador = this.procurarJogadorPeloID(idJogador);
+        if(indiceJogador != -1){
+            this.jogador[indiceJogador].setStatusLivre();
+        }
+    }
+
+    setStatusJogadorOcupado(idJogador){
+        var indiceJogador = this.procurarJogadorPeloID(idJogador);
+        if(indiceJogador != -1){
+            this.jogador[indiceJogador].setStatusOcupado();
+        }
+    }
+
     procurarJogadorPeloID(idJogador){
         for(var i = 0; i < this.jogador.length; i++){
             if(this.jogador[i].id === idJogador){

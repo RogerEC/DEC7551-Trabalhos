@@ -2,13 +2,14 @@ $(document).ready(function(){
 
     $("#TABULEIRO").hide();
     $("#LISTA-JOGADORES").hide();
-    $("#LISTA-JOGADORES").removeClass("ocultar");
-    $("#TABULEIRO").removeClass("ocultar");
-    $("#BotaoInicio").click();
+    ocultarCamposModal();
+    $("#MODAL-ENVIAR-NOME").show();
+    $("#BotaoAbrirModal").click();
 
     const socket = io('http://localhost:3000');
 
     var jogador;
+    var idPart;
     var jogada = new Object();
     jogada.marcador;
     jogada.casaMarcada;
@@ -44,32 +45,87 @@ $(document).ready(function(){
                 corEstado = "btn-warning";
                 desabilitar = 'disabled';
             }
-            $("#INICIO-LISTA-JOGADORES").append('<div class="form-row LINHA-LISTA-JOGADORES"><div class="form-group col-6"><input type="text" class="form-control" value="'+elemento.nome+'" readonly></div><div class="form-group col-3"><input type="text" class="btn '+corEstado+' w-100" value="'+estado+'" readonly></div><div class="form-group col-3"><button class="btn btn-primary botao-convidar w-100" id="botaoConvidar_'+index+'" '+desabilitar+'>CONVIDAR</button></div></div>');
+            $("#INICIO-LISTA-JOGADORES").append('<div class="form-row LINHA-LISTA-JOGADORES"><div class="form-group col-6"><input type="text" class="form-control" value="'+elemento.nome+'" readonly></div><div class="form-group col-3"><input type="text" class="btn '+corEstado+' w-100" value="'+estado+'" readonly></div><div class="form-group col-3"><button class="btn btn-primary botao-convidar w-100" id="botaoConvidar_'+index+'" value="'+elemento.id+'" '+desabilitar+'>CONVIDAR</button></div></div>');
         });
     });
-    
-    var jaValidouNome = false;
 
-    $("#BotaoInicio").on("click", function(){
-        jaValidouNome = false;
+    function ocultarCamposModal(){
+        $("#BotaoModalCancelar").hide();
+        $("#MODAL-CONVITE-RECEBIDO").hide();
+        $("#MODAL-ENVIAR-NOME").hide();
+        $("#MODAL-ERRO-INICIO-PARTIDA").hide();
+    }
+
+    socket.on("partidaIniciada", id_partida => {
+        idPart = id_partida;
+        resetTabuleiro();
+        desabilitaTabuleiro();
+        $("#LISTA-JOGADORES").hide();
+        $("#TABULEIRO").show();
     })
 
-    $("#BotaoModal").on("click", function(event){
+    socket.on("erroInicioPartida", () => {
+        ocultarCamposModal();
+        $("#BotaoModalConfirmar").text("OK");
+        $("#TITULO-MODAL").text("ERRO!");
+        $("#MODAL-ERRO-INICIO-PARTIDA").show();
+        $("#BotaoAbrirModal").click();
+        socket.emit("solicitarListaJogadores");
+        $("#LISTA-JOGADORES").show();
+    })
+
+    socket.on("conviteRecebido", convidante => {
+        $("#BotaoModalConfirmar").val(convidante.id);
+        $("#BotaoModalCancelar").val(convidante.id);
+        $("#MODAL-CONVITE-RECEBIDO p").remove();
+        $("#MODAL-CONVITE-RECEBIDO").append('<p>'+convidante.nome+' te convidou para uma partida!</p>');
+        ocultarCamposModal();
+        $("#BotaoModalConfirmar").text("Aceitar");
+        $("#TITULO-MODAL").text("Você recebeu um convite!");
+        $("#MODAL-CONVITE-RECEBIDO").show();
+        $("#BotaoModalCancelar").show();
+        $("#BotaoAbrirModal").click();
+    });
+
+    $("#BotaoModalCancelar").on("click", function(event){
         event.preventDefault();
-        nomeJogador = $("#nomeJogador").val();
-        if(nomeJogador != ""){
-            socket.emit("novoJogador", nomeJogador);
-        }else{
-            jaValidouNome = true;
-            $("#ERRO-NOME").show();
-            $("#nomeJogador").addClass("is-invalid");
-            return false;
+        if($("#MODAL-CONVITE-RECEBIDO").is(":visible")){
+            socket.emit("recusarConvite", jogador, $("#BotaoModalConfirmar").val());
+        }
+    })
+
+    $("#BotaoModalConfirmar").on("click", function(event){
+        if($("#MODAL-ENVIAR-NOME").is(":visible")){
+            event.preventDefault();
+            console.log("ENVIAR NOME")
+            nomeJogador = $("#nomeJogador").val();
+            if(nomeJogador != ""){
+                socket.emit("novoJogador", nomeJogador);
+            }else{
+                jaValidouNome = true;
+                $("#ERRO-NOME").show();
+                $("#nomeJogador").addClass("is-invalid");
+                return false;
+            }
+        }else if($("#MODAL-CONVITE-RECEBIDO").is(":visible")){
+            event.preventDefault();
+            socket.emit("aceitarConvite", jogador.id, $("#BotaoModalConfirmar").val());
         }
         
     });
 
+    $("#INICIO-LISTA-JOGADORES").on("click", ".botao-convidar", function(event){
+        event.preventDefault();
+        socket.emit("enviarConvite", jogador, $(this).val());
+    })
+    
+    var jaValidouNome = false;
+
+    $("#BotaoAbrirModal").on("click", function(){
+        jaValidouNome = false;
+    })
+
     $("#nomeJogador").keyup(function(){
-        console.log("VALIDAÇÃO")
         if(jaValidouNome){
             if($("#nomeJogador").val() != ''){
                 $("#ERRO-NOME").hide();
@@ -126,7 +182,7 @@ $(document).ready(function(){
         var code = null;
         code = (e.keyCode ? e.keyCode : e.which);
         if(code == 13 && $("#nomeJogador").is(":focus")){
-            $("#BotaoModal").click();
+            $("#BotaoModalConfirmar").click();
             return false;
         }else{
             return true;

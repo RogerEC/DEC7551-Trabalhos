@@ -27,16 +27,39 @@ io.on('connection', socket => {
         socket.broadcast.emit("atualizarListaJogadores", jogo.jogador);
     });
     socket.on("desconectarJogador", dadosJogador => {
-        console.log(dadosJogador.id +' '+dadosJogador.nome);
-        var indicePartida = jogo.removerJogador(dadosJogador.id);
-        if(indicePartida != -1){
-            console.log("encerra partida");
+        console.log("Desconectar");
+        if(dadosJogador != null){
+            var indicePartida = jogo.removerJogador(dadosJogador.id);
+            if(indicePartida != -1){
+                console.log("encerra partida");
+            }
         }
         socket.broadcast.emit("atualizarListaJogadores", jogo.jogador);
     });
     socket.on('solicitarListaJogadores', () => {
         console.log("Enviada lista Jogadores");
         socket.emit("atualizarListaJogadores", jogo.jogador);
+    });
+    socket.on("enviarConvite", (convidante, convidado) => {
+        console.log("Convite enviado");
+        io.to(convidado).emit("conviteRecebido", convidante);
+        jogo.setStatusJogadorOcupado(convidante.id);
+        jogo.setStatusJogadorOcupado(convidado);
+        socket.broadcast.emit("atualizarListaJogadores", jogo.jogador);
+    });
+    socket.on("aceitarConvite", (convidado, convidante) => {
+        var idPartida = jogo.novaPartida(convidado, convidante);
+        if(idPartida != false){
+            io.to(convidado).to(convidante).emit("partidaIniciada", idPartida);
+        }else{
+            io.to(convidato).to(convidante).emit("erroInicioPartida");
+        }
+    });
+    socket.on("recusarConvite", (convidado, convidante) => {
+        jogo.setStatusJogadorLivre(convidante);
+        jogo.setStatusJogadorLivre(convidado);
+        io.to(convidante).emit("conviteRecusado", convidado);
+        io.emit("atualizarListaJogadores", jogo.jogador);
     });
 });
 

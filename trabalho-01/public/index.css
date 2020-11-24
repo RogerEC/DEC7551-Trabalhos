@@ -31,8 +31,8 @@
 }
 
 input:disabled {
-    background-color: #ffffff;
-    cursor: default;
+    background-color: #ffffff !important;
+    cursor: default !important;
 }
 
 .quadrado:focus {
