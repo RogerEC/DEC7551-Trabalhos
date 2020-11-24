@@ -66,13 +66,26 @@ $(document).ready(function(){
         $("#TABULEIRO").show();
     })
 
+    socket.on("ERRO-convidadoDesconectou", () => {
+        $("#BotaoModal2Cancelar").click();
+        $("#MODAL-AVISOS-E-ERROS p").remove();
+        $("#MODAL-AVISOS-E-ERROS").append('<p  class="text-justify mb-2">Houve um erro ao tentar enviar o seu convite, o jogador convidado desconectou.</p><p class="text-justify">Convide outro jogador.</p>');
+        ocultarCamposModal();
+        $("#BotaoModalConfirmar").text("OK");
+        $("#TITULO-MODAL").text("ERRO AO ENVIAR CONVITE");
+        $("#MODAL-AVISOS-E-ERROS").show();
+        $("#BotaoAbrirModal").click();
+        socket.emit("solicitarListaJogadores");
+        $("#LISTA-JOGADORES").show();
+    })
+
     socket.on("erroInicioPartida", () => {
         $("#BotaoModal2Cancelar").click();
         $("#MODAL-AVISOS-E-ERROS p").remove();
         $("#MODAL-AVISOS-E-ERROS").append('<p>Houve um erro ao tentar iniciar a partida. Tente novamente!</p>');
         ocultarCamposModal();
         $("#BotaoModalConfirmar").text("OK");
-        $("#TITULO-MODAL").text("ERRO!");
+        $("#TITULO-MODAL").text("ERRO AO INICIAR PARTIDA");
         $("#MODAL-AVISOS-E-ERROS").show();
         $("#BotaoAbrirModal").click();
         socket.emit("solicitarListaJogadores");

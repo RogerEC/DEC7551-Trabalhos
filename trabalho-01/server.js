@@ -11,6 +11,7 @@ server.listen(3000, () => {
 
 const Jogo = require("./Jogo");
 const jogo = new Jogo();
+var convites = [];
 
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -29,6 +30,17 @@ io.on('connection', socket => {
     socket.on("desconectarJogador", dadosJogador => {
         console.log("Desconectar");
         if(dadosJogador != null){
+            var indiceConvite = buscarConvites(dadosJogador.id);
+            if(indiceConvite != -1){
+                if(convites[indiceConvite][0] === dadosJogador.id){
+                    io.to(convites[indiceConvite][1]).emit("ERRO-convidadoDesconectou");
+                    jogo.setStatusJogadorLivre(convites[indiceConvite][1]);
+                }else{
+                    io.to(convites[indiceConvite][0]).emit("ERRO-convidadoDesconectou");
+                    jogo.setStatusJogadorLivre(convites[indiceConvite][0]);
+                }
+                removeConvite(indiceConvite);
+            }
             var indicePartida = jogo.removerJogador(dadosJogador.id);
             if(indicePartida != -1){
                 console.log("encerra partida");
@@ -43,6 +55,7 @@ io.on('connection', socket => {
     socket.on("enviarConvite", (convidante, convidado) => {
         console.log("Convite enviado");
         io.to(convidado).emit("conviteRecebido", convidante);
+        convites.push([convidante.id, convidado]);
         jogo.setStatusJogadorOcupado(convidante.id);
         jogo.setStatusJogadorOcupado(convidado);
         socket.broadcast.emit("atualizarListaJogadores", jogo.jogador);
@@ -66,3 +79,18 @@ io.on('connection', socket => {
 io.on('disconection', socket => {
     console.log("desconectou " + socket.id);
 });
+
+function buscarConvites(idJogador){
+    for(var i = 0; i < convites.length; i++){
+        if(convites[i][0] === idJogador || convites[i][1] === idJogador){
+            return i;
+        }
+    }
+    return -1;
+}
+
+function removeConvite(indice){
+    if(indice >= 0 && indice < convites.length){
+        convites.splice(indice, 1);
+    }
+}
