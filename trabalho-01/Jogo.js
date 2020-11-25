@@ -9,109 +9,171 @@ module.exports = class Jogo {
     }
 
     getGanhadorPartida(idPartida){
+        
         var indicePartida = this.procurarPartidaPeloID(idPartida);
+        
         if(indicePartida != -1){
+            
             return this.partida[indicePartida].getGanhador();
         }
+        
         return null;
     }
 
     getCasasPartida(idPartida){
+
         var indicePartida = this.procurarPartidaPeloID(idPartida);
+        
         if(indicePartida != -1){
+            
             return this.partida[indicePartida].getCasas();
         }
+        
         return null;
     }
 
     getIDJogadores(idPartida){
+
         var indicePartida = this.procurarPartidaPeloID(idPartida);
+
         if(indicePartida != -1){
+
             return [this.partida[indicePartida].jogador1.id, this.partida[indicePartida].jogador2.id];
         }
+
         return null;
     }
 
     getStatusPartida(idPartida){
+
         var indicePartida = this.procurarPartidaPeloID(idPartida);
+
         if(indicePartida != -1){
+
             this.partida[indicePartida].verificaTabuleiro();
             return this.partida[indicePartida].getStatus();
         }
+
         return null;
     }
 
     getIDOutroJogador(idPartida, idJogador){
+        
         var indicePartida = this.procurarPartidaPeloID(idPartida);
+        
         if(indicePartida != -1){
+            
             return this.partida[indicePartida].getOutroJogador(idJogador);
         }
+        
         return null;
     }
 
-    setCasaTabuleiro(idPartida, casa, marcador){
+    getIDJogadorRestante(idPartida){
         var indicePartida = this.procurarPartidaPeloID(idPartida);
         if(indicePartida != -1){
+            if(this.partida[indicePartida].jogador1 != null){
+                return this.partida[indicePartida].jogador1.id;
+            }else{
+                return this.partida[indicePartida].jogador2.id;
+            }
+        }
+    }
+
+    setCasaTabuleiro(idPartida, casa, marcador){
+        
+        var indicePartida = this.procurarPartidaPeloID(idPartida);
+        
+        if(indicePartida != -1){
+            
             this.partida[indicePartida].setCasa(casa, marcador);
         }
     }
 
     setStatusJogadorLivre(idJogador){
+        
         var indiceJogador = this.procurarJogadorPeloID(idJogador);
+        
         if(indiceJogador != -1){
+            
             this.jogador[indiceJogador].setStatusLivre();
         }
     }
 
     setStatusJogadorOcupado(idJogador){
+        
         var indiceJogador = this.procurarJogadorPeloID(idJogador);
+        
         if(indiceJogador != -1){
+            
             this.jogador[indiceJogador].setStatusOcupado();
         }
     }
 
     procurarJogadorPeloID(idJogador){
+        
         for(var i = 0; i < this.jogador.length; i++){
+            
             if(this.jogador[i].id === idJogador){
+                
                 return i;
             }
         }
+        
         return -1;
     }
 
     procurarPartidaPeloID(idPartida){
+        
         for(var i = 0; i < this.partida.length; i++){
+            
             if(this.partida[i].id === idPartida){
+                
                 return i;
             }
         }
+        
         return -1;
     }
 
     getTabuleiro(idPartida){
+        
         var indicePartida = this.procurarPartidaPeloID(idPartida);
+        
         if(indicePartida != -1){
+            
             return this.partida[indicePartida].getTabuleiro();
         }
+        
         return null;
     }
 
     getIDJogadorMarcadorXO(idPartida){
+        
         var indicePartida = this.procurarPartidaPeloID(idPartida);
+        
         if(indicePartida != -1){
+            
             if(this.partida[indicePartida].jogador1.marcador === 'X'){
+                
                 return [this.partida[indicePartida].jogador1.id, this.partida[indicePartida].jogador2.id];
+            
             }else{
+                
                 return [this.partida[indicePartida].jogador2.id, this.partida[indicePartida].jogador1.id];
             }
         }
+        
         return null;
     }
 
     procurarPartidaPeloIDJogador(idJogador){
+        
         for(var i = 0; i < this.partida.length; i++){
+            
             if(this.partida[i].jogador1.id === idJogador
             || this.partida[i].jogador2.id === idJogador){
+                
                 return i;
             }
         }
@@ -119,6 +181,7 @@ module.exports = class Jogo {
     }
 
     adicionarJogador(id, nome){
+        
         this.jogador.push(new Jogador(id, nome));
     }
 
@@ -149,25 +212,27 @@ module.exports = class Jogo {
     removerJogador(idJogador){
 
         var indiceJogador = this.procurarJogadorPeloID(idJogador);
-        var indicePartida = -1;
+        var retorno = -1;
 
         if(indiceJogador != -1){
             
-            indicePartida = this.procurarPartidaPeloIDJogador(idJogador);
+            var indicePartida = this.procurarPartidaPeloIDJogador(idJogador);
            
             if(indicePartida != -1){
 
                 this.partida[indicePartida].setStatusInterrompido();
                 
                 if(this.partida[indicePartida].jogador1.id === idJogador){
-                    this.partida[indicePartida].jogador1 = false;
+                    this.partida[indicePartida].jogador1 = null;
                 }else{
-                    this.partida[indicePartida].jogador2 = false;
+                    this.partida[indicePartida].jogador2 = null;
                 }
+
+                retorno = this.partida[indicePartida].id;
             }
             this.jogador.splice(indiceJogador, 1);
         }
 
-        return indicePartida;
+        return retorno;
     }
 }

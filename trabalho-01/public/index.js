@@ -86,8 +86,7 @@ $(document).ready(function(){
         $("#MODAL-AVISOS-E-ERROS").show();
         $("#BotaoAbrirModal").click();
         socket.emit("solicitarListaJogadores");
-        $("#LISTA-JOGADORES").show();
-        $("#TABULEIRO").hide();
+        resetPaginaPadrao();
     })
 
     socket.on("erroInicioPartida", () => {
@@ -100,8 +99,30 @@ $(document).ready(function(){
         $("#MODAL-AVISOS-E-ERROS").show();
         $("#BotaoAbrirModal").click();
         socket.emit("solicitarListaJogadores");
-        $("#LISTA-JOGADORES").show();
-        $("#TABULEIRO").hide();
+        resetPaginaPadrao();
+    });
+
+    socket.on("ERRO-desconhecido", () => {
+        $("#MODAL-AVISOS-E-ERROS p").remove();
+        $("#MODAL-AVISOS-E-ERROS").append('<p>Houve um erro desconhecido durante a partida, tente iniciar uma nova partida!</p>');
+        ocultarCamposModal();
+        $("#BotaoModalConfirmar").text("OK");
+        $("#TITULO-MODAL").text("ERRO DESCONHECIDO");
+        $("#MODAL-AVISOS-E-ERROS").show();
+        $("#BotaoAbrirModal").click();
+        socket.emit("solicitarListaJogadores");
+        resetPaginaPadrao();
+    });
+
+    socket.on("ERRO-adversarioDesconectou", () => {
+        $("#MODAL-AVISOS-E-ERROS p").remove();
+        $("#MODAL-AVISOS-E-ERROS").append('<p>Seu adversário desconectou durante a partida, reinicie a partida com outro usuário para continuar jogando.</p>');
+        ocultarCamposModal();
+        $("#BotaoModalConfirmar").text("OK");
+        $("#TITULO-MODAL").text("ERRO DURANTE A PARTIDA");
+        $("#MODAL-AVISOS-E-ERROS").show();
+        $("#BotaoAbrirModal").click();
+        resetPaginaPadrao();
     })
 
     socket.on("conviteRecebido", convidante => {

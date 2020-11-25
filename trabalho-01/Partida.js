@@ -94,27 +94,36 @@ module.exports = class Partida {
     }
 
     setStatusInterrompido(){
+        
         this.status = "interrompido";
     }
 
     getStatus(){
+        
         return this.status;
     }
 
     getCasas(){
+        
         return this.casas;
     }
 
     getGanhador(){
+        
         return this.ganhador;
     }
     
     getOutroJogador(idJogador){
+        
         if(this.jogador1 != '' && this.jogador1.id === idJogador){
+            
             return this.jogador2;
+        
         }else if(this.jogador2 != '' && this.jogador2.id === idJogador){
+            
             return this.jogador1;
         }
+        
         return '';
     }
 }
