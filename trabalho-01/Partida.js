@@ -12,7 +12,7 @@ module.exports = class Partida {
         this.casa.push(["casa10", "casa11", "casa12"]);
         this.casa.push(["casa20", "casa21", "casa22"]);
         this.casa.push(["casa00", "casa10", "casa20"]);
-        this.casa.push(["casa01", "casa11", "casa12"]);
+        this.casa.push(["casa01", "casa11", "casa21"]);
         this.casa.push(["casa02", "casa12", "casa22"]);
         this.casa.push(["casa00", "casa11", "casa22"]);
         this.casa.push(["casa20", "casa11", "casa02"]);
@@ -110,10 +110,10 @@ module.exports = class Partida {
     }
     
     getOutroJogador(idJogador){
-        if(this.jogador1 != '' && this.jogador1.getID() === idJogador){
-            return this.jogador1;
-        }else if(this.jogador2 != '' && this.jogador2.getId() === idJogador){
+        if(this.jogador1 != '' && this.jogador1.id === idJogador){
             return this.jogador2;
+        }else if(this.jogador2 != '' && this.jogador2.id === idJogador){
+            return this.jogador1;
         }
         return '';
     }

@@ -21,6 +21,27 @@
     display: block;
 }
 
+input:disabled {
+    background-color: #ffffff !important;
+    cursor: default !important;
+}
+
+.quadrado-vitoria {
+    background-color: #4fe235 !important;
+}
+
+.quadrado-derrota {
+    background-color: #e43f3f !important;
+}
+
+.quadrado-vitoria:disabled {
+    background-color: #4fe235 !important;
+}
+
+.quadrado-derrota:disabled {
+    background-color: #e43f3f !important;
+}
+
 .backgound-color {
     background-color: #00095c;
     color: #869db4;
@@ -28,11 +49,6 @@
 
 .livre:hover {
     background-color: rgb(185, 185, 185);
-}
-
-input:disabled {
-    background-color: #ffffff !important;
-    cursor: default !important;
 }
 
 .quadrado:focus {
@@ -92,5 +108,5 @@ body{
 main{
     width: 100%;
     flex: 1;
-    padding-top: 60px;
+    padding-top: 70px;
 }

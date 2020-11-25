@@ -5,16 +5,16 @@ $(document).ready(function(){
     ocultarCamposModal();
     $("#MODAL-ENVIAR-NOME").show();
     $("#BotaoAbrirModal").click();
+    $("#MODAL").modal('toggle');
+    $("#MODAL").on('shown.bs.modal', function() {
+        $('#nomeJogador').focus()
+    });
 
     const socket = io('http://localhost:3000');
 
     var jogador;
-    var idPart;
-    var jogada = new Object();
-    jogada.marcador;
-    jogada.casaMarcada;
-    jogada.nomeJogador;
-    jogada.idPartida;
+    var idPartida;
+    var casa = ["casa00", "casa01", "casa02", "casa10", "casa11", "casa12", "casa20", "casa21", "casa22"];
 
     socket.on("cadastroOK", function(dadosJogador){
         jogador = dadosJogador;
@@ -57,13 +57,23 @@ $(document).ready(function(){
         $("#MODAL-ENVIAR-NOME").hide();
     }
 
-    socket.on("partidaIniciada", id_partida => {
-        idPart = id_partida;
+    socket.on("partidaIniciada", (id_partida, marcador) => {
+        console.log("PARIDA INICIADA")
+        idPartida = id_partida;
+        jogador.marcador = marcador;
+        $("#MARCADOR-PARTIDA").text(marcador);
+        $("#MARCADOR-PARTIDA-LINHA").show();
         $("#BotaoModal2Cancelar").click();
         resetTabuleiro();
         desabilitaTabuleiro();
         $("#LISTA-JOGADORES").hide();
         $("#TABULEIRO").show();
+        if(marcador === 'X'){
+            $("#INDICADOR-VEZ-DE-JOGAR").text("É sua vez de jogar!");
+            habilitaTabuleiro();
+        }else{
+            $("#INDICADOR-VEZ-DE-JOGAR").text("É vez do adversário jogar!");
+        }
     })
 
     socket.on("ERRO-convidadoDesconectou", () => {
@@ -77,6 +87,7 @@ $(document).ready(function(){
         $("#BotaoAbrirModal").click();
         socket.emit("solicitarListaJogadores");
         $("#LISTA-JOGADORES").show();
+        $("#TABULEIRO").hide();
     })
 
     socket.on("erroInicioPartida", () => {
@@ -90,6 +101,7 @@ $(document).ready(function(){
         $("#BotaoAbrirModal").click();
         socket.emit("solicitarListaJogadores");
         $("#LISTA-JOGADORES").show();
+        $("#TABULEIRO").hide();
     })
 
     socket.on("conviteRecebido", convidante => {
@@ -114,7 +126,65 @@ $(document).ready(function(){
         $("#TITULO-MODAL").text("Seu convite foi recusado!");
         $("#MODAL-AVISOS-E-ERROS").show();
         $("#BotaoAbrirModal").click();
-    })
+    });
+
+    $("#BotaoJogarNovamente").on("click", function(event){
+        event.preventDefault();
+        socket.emit("jogarNovamente");
+        resetPaginaPadrao();
+    });
+
+    socket.on("vitoria", (tabuleiro, casasParaMarcar) => { 
+        atualizaTabuleiro(tabuleiro);
+        desabilitaTabuleiro();
+        console.log("vitoria");
+        console.log(tabuleiro);
+        console.log(casasParaMarcar);
+        $("#INDICADOR-VEZ-DE-JOGAR").text("Parabéns, você ganhou!");
+        $("#BotaoJogarNovamente").show();
+        casasParaMarcar.forEach((elemento) => {
+            $("#"+elemento).addClass("quadrado-vitoria");
+        })
+    });
+
+    socket.on("derrota", (tabuleiro, casasParaMarcar) => {
+        atualizaTabuleiro(tabuleiro);
+        desabilitaTabuleiro();
+        console.log("derrota");
+        console.log(tabuleiro);
+        console.log(casasParaMarcar);
+        $("#INDICADOR-VEZ-DE-JOGAR").text("Que pena, você perdeu!");
+        $("#BotaoJogarNovamente").show();
+        casasParaMarcar.forEach((elemento) => {
+            $("#"+elemento).addClass("quadrado-derrota");
+        });
+    });
+
+    socket.on("empate", (tabuleiro) => {
+        atualizaTabuleiro(tabuleiro);
+        desabilitaTabuleiro();
+        $("#INDICADOR-VEZ-DE-JOGAR").text("Ninguém ganhou ou perdeu, deu empate!");
+        $("#BotaoJogarNovamente").show();
+    });
+
+
+
+
+    socket.on("realizarJogada", (tabuleiro) => {
+        $("#INDICADOR-VEZ-DE-JOGAR").text("É sua vez de jogar!");
+        atualizaTabuleiro(tabuleiro);
+    });
+
+    function atualizaTabuleiro(tabuleiro){
+        casa.forEach((elemento) => {
+            if(tabuleiro[elemento] != ''){
+                $("#"+elemento).val(tabuleiro[elemento]);
+                $("#"+elemento).removeClass("livre");
+                $("#"+elemento).css("cursor", "default");
+            }
+            habilitaTabuleiro();
+        });
+    }
 
     $("#BotaoModalCancelar").on("click", function(event){
         event.preventDefault();
@@ -127,9 +197,11 @@ $(document).ready(function(){
         if($("#MODAL-ENVIAR-NOME").is(":visible")){
             event.preventDefault();
             console.log("ENVIAR NOME")
-            nomeJogador = $("#nomeJogador").val();
+            var nomeJogador = $("#nomeJogador").val();
             if(nomeJogador != ""){
                 socket.emit("novoJogador", nomeJogador);
+                $("#NOME-JOGADOR").text(nomeJogador);
+                $("#NOME-JOGADOR-LINHA").show();
             }else{
                 jaValidouNome = true;
                 $("#ERRO-NOME").show();
@@ -177,14 +249,11 @@ $(document).ready(function(){
     $(".quadrado").on("click", function(){
         if($(this).val() === ""){
             desabilitaTabuleiro();
-            $(this).val(marcador);
+            $(this).val(jogador.marcador);
             $(this).removeClass("livre");
             $(this).css("cursor", "default");
-            jogada.marcador = marcador;
-            jogada.casaMarcada = $(this).attr('id');
-            jogada.idPartida = $.cookie('idPartida');
-            jogada.nomeJogador = $.cookie('nomeJogador');
-            socket.emit('novaJogada', jogada);
+            $("#INDICADOR-VEZ-DE-JOGAR").text("É vez do adversário jogar!");
+            socket.emit('novaJogada', idPartida, $(this).attr('id'), jogador.marcador);
         }
     });
 
@@ -192,9 +261,18 @@ $(document).ready(function(){
         $(".quadrado").each(function(){
             $(this).val("");
             $(this).addClass("livre");
+            $(this).removeClass("quadrado-vitoria");
+            $(this).removeClass("quadrado-derrota");
             $(this).css("cursor", "pointer");
         });
     };
+
+    function resetPaginaPadrao(){
+        $("#MARCADOR-PARTIDA-LINHA").hide();
+        $("#BotaoJogarNovamente").hide();
+        $("#TABULEIRO").hide();
+        $("#LISTA-JOGADORES").show();
+    }
 
     function desabilitaTabuleiro(){
         $(".quadrado").each(function(){

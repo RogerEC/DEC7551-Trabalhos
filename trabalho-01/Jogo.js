@@ -8,6 +8,54 @@ module.exports = class Jogo {
         this.partida = [];
     }
 
+    getGanhadorPartida(idPartida){
+        var indicePartida = this.procurarPartidaPeloID(idPartida);
+        if(indicePartida != -1){
+            return this.partida[indicePartida].getGanhador();
+        }
+        return null;
+    }
+
+    getCasasPartida(idPartida){
+        var indicePartida = this.procurarPartidaPeloID(idPartida);
+        if(indicePartida != -1){
+            return this.partida[indicePartida].getCasas();
+        }
+        return null;
+    }
+
+    getIDJogadores(idPartida){
+        var indicePartida = this.procurarPartidaPeloID(idPartida);
+        if(indicePartida != -1){
+            return [this.partida[indicePartida].jogador1.id, this.partida[indicePartida].jogador2.id];
+        }
+        return null;
+    }
+
+    getStatusPartida(idPartida){
+        var indicePartida = this.procurarPartidaPeloID(idPartida);
+        if(indicePartida != -1){
+            this.partida[indicePartida].verificaTabuleiro();
+            return this.partida[indicePartida].getStatus();
+        }
+        return null;
+    }
+
+    getIDOutroJogador(idPartida, idJogador){
+        var indicePartida = this.procurarPartidaPeloID(idPartida);
+        if(indicePartida != -1){
+            return this.partida[indicePartida].getOutroJogador(idJogador);
+        }
+        return null;
+    }
+
+    setCasaTabuleiro(idPartida, casa, marcador){
+        var indicePartida = this.procurarPartidaPeloID(idPartida);
+        if(indicePartida != -1){
+            this.partida[indicePartida].setCasa(casa, marcador);
+        }
+    }
+
     setStatusJogadorLivre(idJogador){
         var indiceJogador = this.procurarJogadorPeloID(idJogador);
         if(indiceJogador != -1){
@@ -38,6 +86,26 @@ module.exports = class Jogo {
             }
         }
         return -1;
+    }
+
+    getTabuleiro(idPartida){
+        var indicePartida = this.procurarPartidaPeloID(idPartida);
+        if(indicePartida != -1){
+            return this.partida[indicePartida].getTabuleiro();
+        }
+        return null;
+    }
+
+    getIDJogadorMarcadorXO(idPartida){
+        var indicePartida = this.procurarPartidaPeloID(idPartida);
+        if(indicePartida != -1){
+            if(this.partida[indicePartida].jogador1.marcador === 'X'){
+                return [this.partida[indicePartida].jogador1.id, this.partida[indicePartida].jogador2.id];
+            }else{
+                return [this.partida[indicePartida].jogador2.id, this.partida[indicePartida].jogador1.id];
+            }
+        }
+        return null;
     }
 
     procurarPartidaPeloIDJogador(idJogador){
@@ -71,11 +139,9 @@ module.exports = class Jogo {
 
     removerPartida(idPartida){
 
-        var indice = this.procurarIndexPartida(idPartida);
+        var indice = this.procurarPartidaPeloID(idPartida);
         
         if(indice != -1){
-            this.partida[indice].jogador1.setStatusLivre();
-            this.partida[indice].jogador2.setStatusLivre();
             this.partida.splice(indice, 1);
         }
     }
