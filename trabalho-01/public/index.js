@@ -9,7 +9,7 @@ $(document).ready(function(){
     $("#MODAL").on('shown.bs.modal', function() {
         $('#nomeJogador').focus()
     });
-    // teste
+    // teste2
     const socket = io(window.location.href);
 
     var jogador;
