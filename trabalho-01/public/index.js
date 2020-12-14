@@ -10,7 +10,7 @@ $(document).ready(function(){
         $('#nomeJogador').focus()
     });
 
-    const socket = io('http://localhost:3000');
+    const socket = io(window.location.href);
 
     var jogador;
     var idPartida;

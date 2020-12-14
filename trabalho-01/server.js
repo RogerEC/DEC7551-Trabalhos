@@ -4,7 +4,7 @@ const server = require('http').createServer(app);
 const io = require('socket.io')(server);
 const path = require('path');
 
-server.listen(3000, () => {
+server.listen(3000, "0.0.0.0", () => {
     console.log("servidor na porta 3000!");
 });
 
