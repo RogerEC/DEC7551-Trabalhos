@@ -1,0 +1,23 @@
+{
+  "name": "servidor",
+  "version": "1.0.0",
+  "description": "Servidor",
+  "main": "servidor.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RogerEC/DEC7551-Trabalhos.git"
+  },
+  "author": "Roger Eliodoro Condras",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/RogerEC/DEC7551-Trabalhos/issues"
+  },
+  "homepage": "https://github.com/RogerEC/DEC7551-Trabalhos#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "mongodb": "^3.6.3"
+  }
+}
