@@ -14,28 +14,74 @@
                 <div class="navbar-header">
                     <a class="navbar-brand" href="/"><img src="img/logo.svg" height="30" alt="QR Code Loja"><spam class="pl-2"><b>Loja QR Code Scan</b></spam></a>
                 </div>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#opcoes_navbar" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="container-fluid">
-                    <div class="text-center w-100">
-                        
-                    </div>
-                    <div class="collapse navbar-collapse" id="opcoes_navbar"></div>
-                        <ul class="nav navbar-nav ml-auto">
-                            
-                        </ul>
-                    </div>
-                </div>
+                <ul class="nav navbar-nav ml-auto btn backgound-color ocultar" id="BotaoSair">
+                    <b>SAIR</b>
+                </ul>
             </nav>
         </header><!--/Barra de navegação-->
 
         <main class="container w-100">
-            <h1>TESTE</h1>
+            <div id="LOGIN">
+                <form action="" id="FORM-LOGIN">
+                    <div class="form-row">
+                        <div class="form-group col-12">
+                            <label for="userLogin">Usuário:</label>
+                            <input id="userLogin"type="text" class="form-control" maxlength="30" required>
+                            <div id="ERRO-USER" class="invalid-feedback"><b>É obrigatório digitar o nome de usuário!</b></div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-12">
+                            <label for="senhaLogin">Senha:</label>
+                            <input id="senhaLogin" type="password" class="form-control" maxlength="30" required>
+                            <div id="ERRO-SENHA" class="invalid-feedback"><b>É obrigatório informar sua senha!</b></div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-6">
+                            <button id="BOTAO-REALIZAR-CADASTRO" class="btn btn-success w-100" disabled>Realizar Cadastro</button>
+                        </div>
+                        <div class="form-group col-6">
+                            <button id="BOTAO-ENTRAR" class="btn btn-success w-100">Entrar</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div id="CADASTRO" class="ocultar">
+                
+            </div>
+            <div id="SCANER" class="text-center w-100 ocultar">
+                <div>
+                    <canvas id="canvas">
+                </div>
+                <button id="BOTAO-SCAN" class="btn btn-success w-50">Habilitar Scan</button>
+            </div>
+
+            <!--/Modal Mensagem Resultado/Erro -->
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-backdrop="static" data-target="#MODAL" id="BotaoAbrirModal" hidden></button>
+            <div class="modal fade" id="MODAL" tabindex="-1" role="dialog" aria-labelledby="TITULO-MODAL" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header backgound-color">
+                            <h5 class="modal-title text-center w-100" id="TITULO-MODAL">Erro</h5>
+                        </div>
+                        <div class="modal-body">
+                            <div class="container-fluid">
+                                <div id="MODAL-MENSAGEM" class="mt-3 w-100">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer backgound-color">
+                            <button id="BotaoModalConfirmar" type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
+                        </div>
+                    </div>
+                </div>
+            </div> <!--/Modal Mensagem Resultado/Erro -->
+            
         </main>
 
         <footer class="footer">
-            <p class="mt-2 mb-2">Trabalho 2 DEC7551 semestre 2020.1 — Roger Eliodoro Condras (16202798)</p>
+            <p class="mt-2 mb-2">Trabalho Final DEC7551 semestre 2020.1 — Roger Eliodoro Condras (16202798)</p>
         </footer>
 
         <script type="text/javascript" src="js/jquery.min.js"></script>

@@ -1,3 +1,7 @@
+.ocultar {
+    display: none;
+}
+
 .backgound-color {
     background-color: #00095c;
     color: #869db4;
