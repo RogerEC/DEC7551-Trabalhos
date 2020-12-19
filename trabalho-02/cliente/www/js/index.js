@@ -11,6 +11,60 @@ function onDeviceReady() {
     console.log('Running cordova-' + cordova.platformId + '@' + cordova.version);
     //document.getElementById('deviceready').classList.add('ready');
     
+    $("#BOTAO-REALIZAR-CADASTRO").on("click", function(event){
+        event.preventDefault();
+        ocultarTudo();
+        $("#CADASTRO").show();
+    });
+
+    $("#BOTAO-CANCELAR-CADASTRO").on("click", function(event){
+        event.preventDefault();
+        ocultarTudo();
+        $("#LOGIN").show();
+    });
+
+    $("#BOTAO-CADASTRAR").on("click", function(event){
+        event.preventDefault();
+        if(validarDadosCadastro() == false){
+            return;
+        }
+        if(request){
+            request.abort();
+        }
+        request = $.ajax({
+            type: "POST",
+            url: HOST_IP+"/cadastro",
+            data: {
+                "nome": $("#nomeCadastro").val(),
+                "sobrenome": $("sobrenomeCadastro").val(),
+                "user": $("#userCadastro").val(),
+                "senha": $("#senhaCadastro").val(),
+                "senha2": $("#senha2Cadastro").val()
+            }
+        });
+        request.done(function (response, textStatus, jqXHR){
+            console.log("Resposta POST Cadastro recebida!")
+            console.log(response);
+            if(response.codigo === "200"){
+                // implementar comportamento aqui
+            }else{
+                reportarErro(response.codigo);
+            }
+        });
+        request.fail(function (jqXHR, textStatus, errorThrown){
+            console.log("Erro ao receber a resposta do POST Cadastro!");
+            console.log(jqXHR);
+            console.log(textStatus);
+            console.log(errorThrown);
+            reportarErro("000");
+        });
+    });
+
+    function validarDadosCadastro(){
+        // implementar validação aqui
+        return true;
+    }
+
     $("#BOTAO-ENTRAR").on("click", function(event){
         event.preventDefault();
         if(validarDadosLogin() == false){

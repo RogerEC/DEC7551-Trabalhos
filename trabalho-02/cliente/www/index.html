@@ -39,7 +39,7 @@
                     </div>
                     <div class="form-row">
                         <div class="form-group col-6">
-                            <button id="BOTAO-REALIZAR-CADASTRO" class="btn btn-success w-100" disabled>Realizar Cadastro</button>
+                            <button id="BOTAO-REALIZAR-CADASTRO" class="btn btn-success w-100">Realizar Cadastro</button>
                         </div>
                         <div class="form-group col-6">
                             <button id="BOTAO-ENTRAR" class="btn btn-success w-100">Entrar</button>
@@ -48,7 +48,52 @@
                 </form>
             </div>
             <div id="CADASTRO" class="ocultar">
-                
+                <form action="" id="FORM-CADASTRO">
+                    <div class="form-row">
+                        <div class="form-group col-12">
+                            <label for="nomeCadastro">Nome:</label>
+                            <input type="text" id="nomeCadastro" class="form-control" required>
+                            <div id="ERRO-NOME-CADASTRO-VAZIO" class="invalid-feedback"><b>É obrigatório informar seu nome!</b></div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-12">
+                            <label for="sobrenomeCadastro">Sobrenome:</label>
+                            <input type="text" id="sobrenomeCadastro" class="form-control" required>
+                            <div id="ERRO-SOBRENOME-CADASTRO-VAZIO" class="invalid-feedback"><b>É obrigatório informar seu sobrenome!</b></div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-12">
+                            <label for="userCadastro">Nome de usuário:</label>
+                            <input type="text" id="userCadastro" class="form-control" required>
+                            <div id="ERRO-USER-CADASTRO-VAZIO" class="invalid-feedback"><b>É obrigatório informar seu nome de usuário!</b></div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-12">
+                            <label for="senhaCadastro">Senha:</label>
+                            <input type="password" id="senhaCadastro" class="form-control" required>
+                            <div id="ERRO-SENHA-CADASTRO-VAZIA" class="invalid-feedback"><b>É obrigatório informar uma senha!</b></div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-12">
+                            <label for="senha2Cadastro">Confirme sua senha:</label>
+                            <input type="password" id="senha2Cadastro" class="form-control" required>
+                            <div id="ERRO-SENHA2-CADASTRO-VAZIA" class="invalid-feedback"><b>É obrigatório confirmar sua senha!</b></div>
+                            <div id="ERRO-SENHA2-CADASTRO-DIFERENTE" class="invalid-feedback"><b>As duas senhas não coincidem!</b></div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-6">
+                            <button id="BOTAO-CANCELAR-CADASTRO" class="btn btn-danger w-100" disabled>Realizar Cadastro</button>
+                        </div>
+                        <div class="form-group col-6">
+                            <button id="BOTAO-CADASTRAR" class="btn btn-success w-100">Entrar</button>
+                        </div>
+                    </div>
+                </form>
             </div>
             <div id="SCANER" class="text-center w-100 ocultar">
                 <div>
