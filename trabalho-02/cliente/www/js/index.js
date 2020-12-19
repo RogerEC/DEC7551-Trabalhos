@@ -1,4 +1,4 @@
-const HOST_IP = "https://192.168.0.106:3000";
+const HOST_IP = "http://localhost:3000";
 var tokenAcesso = "";
 var user = "";
 var request;
@@ -125,6 +125,8 @@ function onDeviceReady() {
         $("#MODAL-MENSAGEM p").remove();
         if(codigo === "000"){
             $("#MODAL-MENSAGEM").append("<p class='text-justfy'>Ocorreu uma falha ao tentar realizar a comunicação com o servidor.</p>");
+        }else if(codigo === "001"){
+            $("#MODAL-MENSAGEM").append("<p class='text-justfy'>O QR Code scaneado é inválido. Não pertence a loja!</p>");
         }else if(codigo === "400"){
             $("#MODAL-MENSAGEM").append("<p class='text-justfy'>Erro ao processar a sua requisição. Tente novamente!</p>");
         }else if(codigo === "401"){

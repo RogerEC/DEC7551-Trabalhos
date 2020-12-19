@@ -35,7 +35,11 @@ client.connect(function(error) {
 
     console.log("Conectado ao banco de dados!");
 
-    server.listen(process.env.PORT_SERVER, "0.0.0.0", () => {
+    /*server.listen(process.env.PORT_SERVER, "0.0.0.0", () => {
+        console.log("Servidor UP na porta " + process.env.PORT_SERVER + "!");
+    });*/
+
+    app.listen(process.env.PORT_SERVER, "0.0.0.0", () => {
         console.log("Servidor UP na porta " + process.env.PORT_SERVER + "!");
     });
 
@@ -103,6 +107,11 @@ client.connect(function(error) {
             const user = req.body.user;
             const token = req.body.token;
             const qrcode = req.body.qrcode;
+            if(!verificarID(qrcode)){
+                console.log("Codigo do QR Code invalido!");
+                resp.send({"codigo":"001"});
+                return;
+            }
             db.collection('cliente').findOne({"user":user},  (erroConsultaCliente, cliente) => {
                 if(erroConsultaCliente){
                     resp.send({"codigo":"500"}); // erro interno de servidor
@@ -147,3 +156,17 @@ client.connect(function(error) {
         }
     });
 });
+
+function verificarID(code){
+    for(var i=0; i<code.length; i++){
+        if((code[i]>='0' && code[i]<= '9') || (code[i] >= 'a' && code[i] <= 'f')){
+            continue;
+        }else{
+            return false;
+        }
+        
+    }
+    if(code.length != 24)
+        return false;
+    return true;
+}
