@@ -61,9 +61,152 @@ function onDeviceReady() {
     });
 
     function validarDadosCadastro(){
-        // implementar validação aqui
-        return true;
+        var retorno = jaValidou = true;
+        if($("#nomeCadastro").val() === ""){
+            $("#nomeCadastro").removeClass("is-valid");
+            $("#nomeCadastro").addClass("is-invalid");
+            $("#ERRO-NOME-CADASTRO-VAZIO").show();
+            retorno = false;
+        }else{
+            $("#ERRO-NOME-CADASTRO-VAZIO").hide();
+            $("#nomeCadastro").removeClass("is-invalid");
+            $("#nomeCadastro").addClass("is-valid");
+        }
+        if($("#sobrenomeCadastro").val() === ""){
+            $("#sobrenomeCadastro").removeClass("is-valid");
+            $("#sobrenomeCadastro").addClass("is-invalid");
+            $("#ERRO-SOBRENOME-CADASTRO-VAZIO").show();
+            retorno = false;
+        }else{
+            $("#ERRO-SOBRENOME-CADASTRO-VAZIO").hide();
+            $("#sobrenomeCadastro").removeClass("is-invalid");
+            $("#sobrenomeCadastro").addClass("is-valid");
+        }
+        if($("#userCadastro").val() === ""){
+            $("#userCadastro").removeClass("is-valid");
+            $("#userCadastro").addClass("is-invalid");
+            $("#ERRO-USER-CADASTRO-VAZIO").show();
+            retorno = false;
+        }else{
+            $("#ERRO-USER-CADASTRO-VAZIO").hide();
+            $("#userCadastro").removeClass("is-invalid");
+            $("#userCadastro").addClass("is-valid");
+        }
+        if($("#senhaCadastro").val() === ""){
+            $("#senhaCadastro").removeClass("is-valid");
+            $("#senhaCadastro").addClass("is-invalid");
+            $("#ERRO-SENHA-CADASTRO-VAZIA").show();
+            retorno = false;
+        }else{
+            $("#ERRO-SENHA-CADASTRO-VAZIO").hide();
+            $("#senhaCadastro").removeClass("is-invalid");
+            $("#senhaCadastro").addClass("is-valid");
+        }
+        if($("#senha2Cadastro").val() === ""){
+            $("#senha2Cadastro").removeClass("is-valid");
+            $("#senha2Cadastro").addClass("is-invalid");
+            $("#ERRO-SENHA2-CADASTRO-VAZIA").show();
+            $("#ERRO-SENHA2-CADASTRO-DIFERENTE").hide();
+            retorno = false;
+        }else{
+            if($("#senha2Cadastro").val() != $("#senhaCadastro").val()){
+                $("#senha2Cadastro").removeClass("is-valid");
+                $("#senha2Cadastro").addClass("is-invalid");
+                $("#ERRO-SENHA2-CADASTRO-DIFERENTE").show();
+                $("#ERRO-SENHA2-CADASTRO-VAZIA").hide();
+                retorno = false;
+            }else{
+                $("#ERRO-SENHA2-CADASTRO-DIFERENTE").hide();
+                $("#ERRO-SENHA2-CADASTRO-VAZIA").hide();
+                $("#senha2Cadastro").removeClass("is-invalid");
+                $("#senha2Cadastro").addClass("is-valid");
+            }
+        }
+        return retorno;
+    };
+
+    $("#senha2Cadastro").keyup(function(){
+        colorirSenha2();
+    });
+
+    function colorirSenha2(){
+        if(jaValidou){
+            if($("#senha2Cadastro").val() != ''){
+                $("#ERRO-SENHA2-CADASTRO-VAZIA").hide();
+                if($("#senha2Cadastro").val() == $("#senhaCadastro").val()){
+                    $("#ERRO-SENHA2-CADASTRO-DIFERENTE").hide();
+                    $("#senha2Cadastro").removeClass("is-invalid");
+                    $("#senha2Cadastro").addClass("is-valid");
+                }else{
+                    $("#ERRO-SENHA2-CADASTRO-DIFERENTE").show();
+                    $("#senha2Cadastro").removeClass("is-valid");
+                    $("#senha2Cadastro").addClass("is-invalid");
+                }
+            }else{
+                $("#ERRO-SENHA2-CADASTRO-DIFERENTE").hide();
+                $("#ERRO-SENHA2-CADASTRO-VAZIA").show();
+                $("#senha2Cadastro").removeClass("is-valid");
+                $("#senha2Cadastro").addClass("is-invalid");
+            }
+        }
     }
+
+    $("#nomeCadastro").keyup(function(){
+        if(jaValidou){
+            if($("#nomeCadastro").val() != ''){
+                $("#ERRO-NOME-CADASTRO-VAZIO").hide();
+                $("#nomeCadastro").removeClass("is-invalid");
+                $("#nomeCadastro").addClass("is-valid");
+            }else{
+                $("#ERRO-NOME-CADASTRO-VAZIO").show();
+                $("#nomeCadastro").removeClass("is-valid");
+                $("#nomeCadastro").addClass("is-invalid");
+            }
+        }
+    });
+
+    $("#sobrenomeCadastro").keyup(function(){
+        if(jaValidou){
+            if($("#sobrenomeCadastro").val() != ''){
+                $("#ERRO-SOBRENOME-CADASTRO-VAZIO").hide();
+                $("#sobrenomeCadastro").removeClass("is-invalid");
+                $("#sobrenomeCadastro").addClass("is-valid");
+            }else{
+                $("#ERRO-SOBRENOME-CADASTRO-VAZIO").show();
+                $("#sobrenomeCadastro").removeClass("is-valid");
+                $("#sobrenomeCadastro").addClass("is-invalid");
+            }
+        }
+    });
+
+    $("#userCadastro").keyup(function(){
+        if(jaValidou){
+            if($("#userCadastro").val() != ''){
+                $("#ERRO-USER-CADASTRO-VAZIO").hide();
+                $("#userCadastro").removeClass("is-invalid");
+                $("#userCadastro").addClass("is-valid");
+            }else{
+                $("#ERRO-USER-CADASTRO-VAZIO").show();
+                $("#userCadastro").removeClass("is-valid");
+                $("#userCadastro").addClass("is-invalid");
+            }
+        }
+    });
+
+    $("#senhaCadastro").keyup(function(){
+        if(jaValidou){
+            if($("#senhaCadastro").val() != ''){
+                $("#ERRO-SENHA-CADASTRO-VAZIA").hide();
+                $("#senhaCadastro").removeClass("is-invalid");
+                $("#senhaCadastro").addClass("is-valid");
+            }else{
+                $("#ERRO-SENHA-CADASTRO-VAZIA").show();
+                $("#senhaCadastro").removeClass("is-valid");
+                $("#senhaCadastro").addClass("is-invalid");
+            }
+            colorirSenha2();
+        }
+    });
 
     $("#BOTAO-ENTRAR").on("click", function(event){
         event.preventDefault();
@@ -171,6 +314,11 @@ function onDeviceReady() {
         $("#SCANER").hide();
         $("#senhaLogin").removeClass("is-valid").removeClass("is-invalid").val("");
         $("#userLogin").removeClass("is-valid").removeClass("is-invalid").val("");
+        $("#nomeCadastro").removeClass("is-valid").removeClass("is-invalid").val("");
+        $("#sobrenomeCadastro").removeClass("is-valid").removeClass("is-invalid").val("");
+        $("#userCadastro").removeClass("is-valid").removeClass("is-invalid").val("");
+        $("#senhaCadastro").removeClass("is-valid").removeClass("is-invalid").val("");
+        $("#senha2Cadastro").removeClass("is-valid").removeClass("is-invalid").val("");
         $("#BotaoSair").hide();
         jaValidou = false;
     }
